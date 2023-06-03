@@ -30,11 +30,17 @@ public class Player : MonoBehaviour
             _xMoveDir = 1;
             _xMoveCount++;
         }
+        
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            _rb.AddForce(Vector3.up * 10, ForceMode.Impulse);
+        }
         _rb.AddForce(Vector3.right * _xMoveDir * _xMoveSpeed, ForceMode.Impulse);
     }
 
     private void FixedUpdate()
     {
-        _rb.velocity = Vector3.forward * _forwardMoveSpeed;
+        _rb.velocity = new Vector3(0, _rb.velocity.y, _forwardMoveSpeed);
+        //_rb.AddForce(Vector3.forward * _forwardMoveSpeed, ForceMode.Force);
     }
 }

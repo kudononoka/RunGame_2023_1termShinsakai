@@ -2,17 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Coin : MonoBehaviour
+public class Coin : LaneObjectBase
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void Action()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        GameManager.Instance.PointPlus();
     }
 }

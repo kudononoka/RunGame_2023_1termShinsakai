@@ -2,17 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LaneObjectBase : MonoBehaviour
+public abstract class LaneObjectBase : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public abstract void Action();
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        
+        if(other.gameObject.CompareTag("Player"))
+        {
+            Action();
+        }
     }
 }

@@ -6,6 +6,9 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     Rigidbody _rb;
+    Animator _anim;
+    MotionState _motionState = MotionState.Run;
+    [SerializeField, Header("Playerの接地判定スクリプト")]GroundJudge _groundJudge;
     [SerializeField,Header("前に進むスピード")] float _forwardMoveSpeed;
     [SerializeField, Header("横移動スピード")] float _xMoveSpeed;
     float _xMoveDir;
@@ -14,33 +17,49 @@ public class Player : MonoBehaviour
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
+        _anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
         _xMoveDir = 0;
-        if (Input.GetKeyDown(KeyCode.LeftArrow) && _xMoveCount > -1)
+        if (Input.GetKeyDown(KeyCode.A) && _xMoveCount > -1)
         {
             _xMoveDir = -1;
             _xMoveCount--;
         }
-        else if (Input.GetKeyDown(KeyCode.RightArrow) && _xMoveCount < 1)
+        else if (Input.GetKeyDown(KeyCode.D) && _xMoveCount < 1)
         {
             _xMoveDir = 1;
             _xMoveCount++;
         }
         
-        if(Input.GetKeyDown(KeyCode.Space))
+        if(Input.GetKeyDown(KeyCode.W))
         {
             _rb.AddForce(Vector3.up * 10, ForceMode.Impulse);
         }
+
+        if(Input.GetKeyDown(KeyCode.S))
+        {
+            _anim.SetTrigger("Sliding");
+        }
         _rb.AddForce(Vector3.right * _xMoveDir * _xMoveSpeed, ForceMode.Impulse);
+
+        _anim.SetBool("Jump", !_groundJudge.IsGround);
     }
 
     private void FixedUpdate()
     {
         _rb.velocity = new Vector3(0, _rb.velocity.y, _forwardMoveSpeed);
         //_rb.AddForce(Vector3.forward * _forwardMoveSpeed, ForceMode.Force);
+    }
+
+    /// <summary>Playerの動き状態を管理するenum</summary>
+    enum MotionState
+    {
+        Run,
+        Jump,
+        Sliding,
     }
 }

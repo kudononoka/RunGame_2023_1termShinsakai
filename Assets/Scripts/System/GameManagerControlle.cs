@@ -12,7 +12,7 @@ public class GameManagerControlle : MonoBehaviour
     {
         _gameManager = GameManager.Instance;
         _gameManager.ChangeSceneNameLoad(_nextSceneName);
-        if(_nowGameState == GameManager.GameState.None)
+        if(_nowGameState == GameManager.GameState.Title)
         {
             _gameManager.PointScoreReset();
         }

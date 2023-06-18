@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class LaneObjectPsrticle : MonoBehaviour
 {
-    Transform _player;
-    ParticleSystem _system;
+    //Transform _player;
+    //ParticleSystem _system;
     private void Awake()
     {
-        _player = GameObject.FindWithTag("Player").GetComponent<Transform>();
-        _system = GetComponent<ParticleSystem>();
+        //_player = GameObject.FindWithTag("Player").GetComponent<Transform>();
+        //_system = GetComponent<ParticleSystem>();
         //_system.trigger.SetCollider(0, _player.transform);
-        ParticleSystem.TriggerModule _systemTrigger = _system.trigger;
-        ParticleSystemOverlapAction triggerState = _systemTrigger.enter;
-        triggerState = ParticleSystemOverlapAction.Callback;
-        _systemTrigger.enter = triggerState;
+        //ParticleSystem.TriggerModule _systemTrigger = _system.trigger;
+        //ParticleSystemOverlapAction triggerState = _systemTrigger.enter;
+        //triggerState = ParticleSystemOverlapAction.Callback;
+        //_systemTrigger.enter = triggerState;
         //_system.trigger = triggerState;
     }
     
@@ -22,7 +22,14 @@ public class LaneObjectPsrticle : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Player"))
         {
-            GameManager.Instance.GamedState = GameManager.GameState.GameOver;
+            StartCoroutine(GameOverActive());
         }
+    }
+
+    IEnumerator GameOverActive()
+    {
+        GameManager.Instance.GamedState = GameManager.GameState.GameOver;
+        yield return new WaitForSeconds(0.01f);
+        FindObjectOfType<FadeSceneTrigger>().Trigger();
     }
 }

@@ -2,17 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static GameManager;
 
 public class Player : MonoBehaviour
 {
     Rigidbody _rb;
     Animator _anim;
-    MotionState _motionState = MotionState.Run;
+    [SerializeField] MotionState _motionState;
     [SerializeField, Header("Playerの接地判定スクリプト")]GroundJudge _groundJudge;
     [SerializeField,Header("前に進むスピード")] float _forwardMoveSpeed;
     [SerializeField, Header("横移動スピード")] float _xMoveSpeed;
     float _xMoveDir;
     float _xMoveCount;
+    public MotionState motionState { get { return _motionState; } set { _motionState = value; } }
     // Start is called before the first frame update
     void Start()
     {
@@ -35,9 +37,9 @@ public class Player : MonoBehaviour
             _xMoveCount++;
         }
         
-        if(Input.GetKeyDown(KeyCode.W))
+        if(Input.GetKeyDown(KeyCode.W) && _groundJudge.IsGround)
         {
-            _rb.AddForce(Vector3.up * 7, ForceMode.Impulse);
+            _rb.AddForce(Vector3.up * 6, ForceMode.Impulse);
         }
 
         if(Input.GetKeyDown(KeyCode.S))
@@ -51,15 +53,17 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if(_motionState != MotionState.None)
         _rb.velocity = transform.rotation *  new Vector3(0, _rb.velocity.y, _forwardMoveSpeed);
         //_rb.AddForce(Vector3.forward * _forwardMoveSpeed, ForceMode.Force);
     }
 
     /// <summary>Playerの動き状態を管理するenum</summary>
-    enum MotionState
+    public enum MotionState
     {
         Run,
         Jump,
         Sliding,
+        None,
     }
 }
